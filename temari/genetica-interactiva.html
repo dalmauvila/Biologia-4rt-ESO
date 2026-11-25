@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Activitats interactives · Genètica i herència</title>
+  <style>
+    :root { color-scheme: light; --ink: #20243a; --purple: #7041a6; --blue: #1769aa; --green: #237a4b; --orange: #a64b13; --paper: #f7f8fc; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.6 system-ui, sans-serif; }
+    main { max-width: 780px; margin: 0 auto; padding: 1.5rem; }
+    h1 { line-height: 1.2; }
+    .intro { background: white; border-left: 5px solid var(--purple); padding: .8rem 1rem; }
+    fieldset { margin: 1rem 0; padding: 1rem; border: 1px solid #d5d8e2; border-radius: 12px; background: white; }
+    legend { padding: 0 .4rem; font-weight: 700; }
+    label { display: block; margin: .4rem 0; }
+    input { box-sizing: border-box; width: 100%; max-width: 34rem; padding: .65rem; border: 1px solid #777; border-radius: 6px; font: inherit; }
+    input:focus, button:focus { outline: 3px solid #91bfff; outline-offset: 2px; }
+    button { margin: .6rem .35rem .2rem 0; padding: .6rem .9rem; border: 0; border-radius: 7px; background: var(--blue); color: white; font: inherit; font-weight: 650; cursor: pointer; }
+    button.secondary { background: #50566b; }
+    .feedback { min-height: 1.6em; font-weight: 700; }
+    .correct { color: #176637; } .incorrect { color: #9b2c25; }
+    #score { font-weight: 700; }
+    @media (prefers-reduced-motion: no-preference) { fieldset { transition: box-shadow .15s ease; } fieldset:focus-within { box-shadow: 0 2px 12px #25304a22; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>🧬 Activitats interactives: genètica i herència</h1>
+  <p class="intro">Escriu la resposta a cada camp i prem <strong>Comprova</strong>. Rebràs una pista si cal. Les activitats fan servir models senzills per practicar: els caràcters reals poden dependre de molts gens i de l’ambient.</p>
+
+  <form id="quiz">
+    <fieldset data-answers="gen|regio d adn|regio d adn que contribueix a produir un producte funcional">
+      <legend>1 · ADN, gens i cromosomes</legend>
+      <label for="a1">Com s’anomena una regió d’ADN que contribueix a produir un producte funcional?</label>
+      <input id="a1" name="a1" autocomplete="off" required>
+      <button type="button" class="check">Comprova</button>
+      <p class="feedback" aria-live="polite"></p>
+    </fieldset>
+
+    <fieldset data-answers="23|vint-i-tres|vint i tres">
+      <legend>2 · Divisió cel·lular</legend>
+      <label for="a2">Quants cromosomes té un gàmeta humà? Escriu el nombre.</label>
+      <input id="a2" name="a2" inputmode="numeric" autocomplete="off" required>
+      <button type="button" class="check">Comprova</button>
+      <p class="feedback" aria-live="polite"></p>
+    </fieldset>
+
+    <fieldset data-answers="heterozigot|heterozigota|heterozigot/a|heterozigot (te dos al·lels diferents)|heterozigot (te dos al·lels diferents per a un gen)">
+      <legend>3 · Herència</legend>
+      <label for="a3">En el model d’un gen amb al·lels A i a, com s’anomena un individu amb genotip Aa?</label>
+      <input id="a3" name="a3" autocomplete="off" required>
+      <button type="button" class="check">Comprova</button>
+      <p class="feedback" aria-live="polite"></p>
+    </fieldset>
+
+    <fieldset data-answers="25|25%|25 per cent|un quart|1/4|una de cada quatre|una de cada 4">
+      <legend>4 · Creuament genètic</legend>
+      <label for="a4">En el creuament Aa × Aa, quina probabilitat hi ha que un descendent sigui aa? Pots escriure un percentatge o una fracció.</label>
+      <input id="a4" name="a4" autocomplete="off" required>
+      <button type="button" class="check">Comprova</button>
+      <p class="feedback" aria-live="polite"></p>
+    </fieldset>
+
+    <fieldset data-answers="canvi en el material genetic|canvi del material genetic|un canvi en el material genetic|una mutacio es un canvi en el material genetic">
+      <legend>5 · Mutacions i variabilitat</legend>
+      <label for="a5">Explica breument què és una mutació.</label>
+      <input id="a5" name="a5" autocomplete="off" required>
+      <button type="button" class="check">Comprova</button>
+      <p class="feedback" aria-live="polite"></p>
+    </fieldset>
+
+    <button type="button" id="checkAll">Comprova totes</button>
+    <button type="reset" class="secondary">Esborra les respostes</button>
+    <p id="score" aria-live="polite"></p>
+  </form>
+</main>
+<script>
+  const normalize = value => value.trim().toLocaleLowerCase('ca')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[’']/g, ' ').replace(/[.,;:!?]/g, '').replace(/\s+/g, ' ');
+
+  function check(field) {
+    const input = field.querySelector('input');
+    const feedback = field.querySelector('.feedback');
+    const answers = field.dataset.answers.split('|').map(normalize);
+    const value = normalize(input.value);
+    feedback.className = 'feedback';
+    if (!value) {
+      feedback.textContent = 'Escriu una resposta abans de comprovar-la.';
+      feedback.classList.add('incorrect');
+      input.focus();
+      return false;
+    }
+    const correct = answers.includes(value);
+    feedback.textContent = correct
+      ? 'Correcte! Molt bé.'
+      : 'Encara no. Repassa els apunts i prova-ho de nou.';
+    feedback.classList.add(correct ? 'correct' : 'incorrect');
+    return correct;
+  }
+
+  const fields = [...document.querySelectorAll('fieldset')];
+  document.querySelectorAll('.check').forEach(button => {
+    button.addEventListener('click', () => check(button.closest('fieldset')));
+  });
+  document.querySelector('#checkAll').addEventListener('click', () => {
+    let score = 0;
+    fields.forEach(field => { if (check(field)) score++; });
+    document.querySelector('#score').textContent = `Resultat: ${score} de ${fields.length} respostes correctes.`;
+  });
+  document.querySelector('#quiz').addEventListener('reset', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.feedback').forEach(item => { item.textContent = ''; item.className = 'feedback'; });
+      document.querySelector('#score').textContent = '';
+    });
+  });
+</script>
+</body>
+</html>
