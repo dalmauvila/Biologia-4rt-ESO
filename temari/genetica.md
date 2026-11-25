@@ -7,6 +7,8 @@
 
 Els símbols de colors identifiquen visualment cada apartat. Les solucions de les activitats són desplegables: intenta resoldre-les abans d’obrir-les.
 
+👉 **[Activitats interactives: escriu les respostes i comprova-les](genetica-interactiva.html)**
+
 ## 🟣 1. ADN, gens i cromosomes
 
 L’**ADN** és una molècula que conté informació hereditària. Un **gen** és una regió d’ADN que contribueix a produir un producte funcional, com ara una proteïna o una molècula d’ARN. L’ADN s’organitza en **cromosomes**. Les diferents versions d’un gen s’anomenen **al·lels**.
